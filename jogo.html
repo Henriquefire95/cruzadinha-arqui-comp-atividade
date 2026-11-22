@@ -1,41 +1,84 @@
-HTML
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sonic ArqComp - Cruzadinha</title>
+<title>Sonic the Hedgehog - ArqComp Zone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="header">
-<h1>SONIC ZONE: ARQUITETURA COMPUTACIONAL</h1>
-<p>Complete a cruzadinha antes que o Dr. Eggman domine o hardware!</p>
-<div class="placar">
-<span>Anéis Coletados (Acertos): <strong id="span_acertos">0</strong> de 13 palavras</span>
-</div>
+
+<div class="sky-layer">
+<div class="cloud cloud-1"></div>
+<div class="cloud cloud-2"></div>
 </div>
 
-<div class="container">
-<div class="tabuleiro-area">
+<header class="hud-banner">
+<div class="emblem">
+<div class="ring-icon"></div>
+<div class="title-box">
+<span class="zone-tag">GREEN HILL HARDWARE - ACT 1</span>
+<h1>SONIC ARQCOMP</h1>
+</div>
+<div class="ring-icon"></div>
+</div>
+<div class="hud-stats">
+<div class="stat-pill">
+<span class="ring-mini"></span>
+<span>RINGS: <strong id="span_acertos">0</strong> / 13</span>
+</div>
+<div class="stat-pill status-pill">
+<span id="span_status">STATUS: PRONTO PARA O SPIN DASH!</span>
+</div>
+</div>
+</header>
+
+<main class="game-stage">
+<section class="board-cabinet">
+<div class="cabinet-header">
+<span>TABULEIRO DE MEMÓRIA & CPU</span>
+<span class="tip-text">Use as setas ou digite direto</span>
+</div>
 <div id="div_tabuleiro" class="tabuleiro"></div>
-<div class="botoes">
-<button onclick="conferir()" class="btn-conferir">Conferir</button>
-<button onclick="reiniciar()" class="btn-reiniciar">Reiniciar</button>
+<div class="controls-bar">
+<button onclick="conferir()" class="btn-sonic btn-gold">CONFERIR RESPOSTAS</button>
+<button onclick="reiniciar()" class="btn-sonic btn-red">REINICIAR FASE</button>
 </div>
-</div>
+</section>
 
-<div class="pistas-area">
-<div class="bloco-pistas">
+<aside class="clues-panel">
+<div class="clue-card">
+<div class="card-title">
+<span class="arrow-badge">➔</span>
 <h2>HORIZONTAIS</h2>
+</div>
 <ul id="lista_horizontais"></ul>
 </div>
-<div class="bloco-pistas">
+
+<div class="clue-card">
+<div class="card-title">
+<span class="arrow-badge">⬇</span>
 <h2>VERTICAIS</h2>
+</div>
 <ul id="lista_verticais"></ul>
 </div>
+</aside>
+</main>
+
+<div id="div_vitoria" class="victory-modal hidden">
+<div class="victory-box">
+<div class="ring-icon big-ring"></div>
+<h2>STAGE CLEAR!</h2>
+<p>Você dominou os 13 conceitos e derrotou o Dr. Eggman!</p>
+<div class="score-summary">SCORE: 13 / 13 ANÉIS</div>
+<button onclick="fecharVitoria()" class="btn-sonic btn-gold">CONTINUAR</button>
 </div>
 </div>
+
+<div class="ground-checker"></div>
 
 <script src="script.js"></script>
 </body>
