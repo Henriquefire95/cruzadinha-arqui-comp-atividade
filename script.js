@@ -107,6 +107,7 @@ pista: "Processador equipado com quatro núcleos físicos para processamento par
 
 let totalLinhas = 15;
 let totalColunas = 16;
+let direcaoAtual = "H";
 
 function montarJogo() {
 let grade = [];
@@ -131,10 +132,12 @@ l = l + j;
 if (grade[l][c] == null) {
 grade[l][c] = {
 letra: item.palavra[j],
-numero: j == 0 ? item.numero : ""
+numero: j == 0 ? item.numero : "",
+direcaoInicio: j == 0 ? item.direcao : ""
 };
 } else if (j == 0) {
 grade[l][c].numero = item.numero;
+grade[l][c].direcaoInicio = item.direcao;
 }
 }
 }
@@ -146,10 +149,11 @@ if (grade[l][c] == null) {
 htmlTabuleiro += `<div class="celula-vazia"></div>`;
 } else {
 let numTexto = grade[l][c].numero != "" ? `<span class="numero-pista">${grade[l][c].numero}</span>` : "";
+let dirInicio = grade[l][c].direcaoInicio;
 htmlTabuleiro += `
 <div class="celula-wrapper">
 ${numTexto}
-<input type="text" maxlength="1" id="cel_${l}_${c}" class="celula-input" oninput="limparCor(this)">
+<input type="text" maxlength="1" id="cel_${l}_${c}" class="celula-input" onfocus="definirDirecao('${dirInicio}')" oninput="aoDigitar(this, ${l}, ${c})" onkeydown="aoPressionarTecla(event, ${l}, ${c})">
 </div>
 `;
 }
@@ -161,7 +165,7 @@ let htmlHorizontais = "";
 let htmlVerticais = "";
 for (let i = 0; i < palavras.length; i++) {
 let item = palavras[i];
-let linhaPista = `<li><strong>${item.numero}.</strong> ${item.pista}</li>`;
+let linhaPista = `<li id="pista_${item.numero}" onclick="focarPalavra(${item.linha}, ${item.coluna}, '${item.direcao}')"><span class="clue-num">${item.numero}</span>${item.pista}</li>`;
 if (item.direcao == "H") {
 htmlHorizontais += linhaPista;
 } else {
@@ -172,9 +176,65 @@ lista_horizontais.innerHTML = htmlHorizontais;
 lista_verticais.innerHTML = htmlVerticais;
 }
 
-function limparCor(input) {
+function definirDirecao(dir) {
+if (dir == "H" || dir == "V") {
+direcaoAtual = dir;
+}
+}
+
+function focarPalavra(l, c, dir) {
+direcaoAtual = dir;
+let campo = document.querySelector(`#cel_${l}_${c}`);
+if (campo != null) {
+campo.focus();
+}
+}
+
+function aoDigitar(input, l, c) {
 input.classList.remove("certa");
 input.classList.remove("errada");
+
+if (input.value.length == 1) {
+let proxL = direcaoAtual == "V" ? l + 1 : l;
+let proxC = direcaoAtual == "H" ? c + 1 : c;
+let proximoCampo = document.querySelector(`#cel_${proxL}_${proxC}`);
+if (proximoCampo != null) {
+proximoCampo.focus();
+}
+}
+}
+
+function aoPressionarTecla(evento, l, c) {
+let alvoL = l;
+let alvoC = c;
+
+if (evento.key == "ArrowRight") {
+direcaoAtual = "H";
+alvoC = c + 1;
+} else if (evento.key == "ArrowLeft") {
+direcaoAtual = "H";
+alvoC = c - 1;
+} else if (evento.key == "ArrowDown") {
+direcaoAtual = "V";
+alvoL = l + 1;
+} else if (evento.key == "ArrowUp") {
+direcaoAtual = "V";
+alvoL = l - 1;
+} else if (evento.key == "Backspace" && evento.target.value == "") {
+if (direcaoAtual == "H") {
+alvoC = c - 1;
+} else {
+alvoL = l - 1;
+}
+} else {
+return;
+}
+
+let proximo = document.querySelector(`#cel_${alvoL}_${alvoC}`);
+if (proximo != null) {
+evento.preventDefault();
+proximo.focus();
+}
 }
 
 function conferir() {
@@ -204,6 +264,13 @@ palavraCorreta = false;
 }
 }
 
+let itemPista = document.querySelector(`#pista_${item.numero}`);
+if (palavraCorreta) {
+itemPista.classList.add("pista-resolvida");
+} else {
+itemPista.classList.remove("pista-resolvida");
+}
+
 for (let j = 0; j < item.palavra.length; j++) {
 let l = item.linha;
 let c = item.coluna;
@@ -226,6 +293,17 @@ acertos++;
 }
 
 span_acertos.innerHTML = acertos;
+
+if (acertos == palavras.length) {
+span_status.innerHTML = "STATUS: ZONE CLEARED!";
+div_vitoria.classList.remove("hidden");
+} else {
+span_status.innerHTML = `STATUS: ${acertos} DE ${palavras.length} ANÉIS COLETADOS`;
+}
+}
+
+function fecharVitoria() {
+div_vitoria.classList.add("hidden");
 }
 
 function reiniciar() {
@@ -235,7 +313,15 @@ inputs[i].value = "";
 inputs[i].classList.remove("certa");
 inputs[i].classList.remove("errada");
 }
+
+for (let i = 0; i < palavras.length; i++) {
+let itemPista = document.querySelector(`#pista_${palavras[i].numero}`);
+itemPista.classList.remove("pista-resolvida");
+}
+
 span_acertos.innerHTML = "0";
+span_status.innerHTML = "STATUS: PRONTO PARA O SPIN DASH!";
+div_vitoria.classList.add("hidden");
 }
 
 montarJogo();
