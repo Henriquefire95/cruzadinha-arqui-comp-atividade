@@ -1,327 +1,214 @@
-let palavras = [
-{
-numero: 1,
-palavra: "MICROCONTROLADOR",
-direcao: "H",
-linha: 1,
-coluna: 0,
-pista: "Chip completo com processador, memória e periféricos integrados para sistemas embarcados."
-},
-{
-numero: 2,
-palavra: "ROM",
-direcao: "V",
-linha: 0,
-coluna: 3,
-pista: "Memória não volátil que guarda instruções permanentes de inicialização."
-},
-{
-numero: 3,
-palavra: "REGISTRADORES",
-direcao: "V",
-linha: 1,
-coluna: 8,
-pista: "Memória interna ultrarrápida da CPU usada para guardar dados temporários."
-},
-{
-numero: 4,
-palavra: "ADDRESSBUS",
-direcao: "V",
-linha: 1,
-coluna: 12,
-pista: "Via unidirecional por onde o processador envia locais físicos de memória."
-},
-{
-numero: 5,
-palavra: "CACHE",
-direcao: "H",
-linha: 3,
-coluna: 11,
-pista: "Memória intermediária veloz entre o processador e a memória principal."
-},
-{
-numero: 6,
-palavra: "DATABUS",
-direcao: "H",
-linha: 5,
-coluna: 7,
-pista: "Via bidirecional que transporta informações entre processador, memória e periféricos."
-},
-{
-numero: 7,
-palavra: "ULA",
-direcao: "V",
-linha: 5,
-coluna: 13,
-pista: "Parte da CPU que faz as contas e as operações lógicas."
-},
-{
-numero: 8,
-palavra: "FLASH",
-direcao: "H",
-linha: 7,
-coluna: 5,
-pista: "Armazenamento não volátil regravável eletricamente em blocos, usado em pendrives."
-},
-{
-numero: 9,
-palavra: "CPU",
-direcao: "V",
-linha: 7,
-coluna: 10,
-pista: "Cérebro do computador responsável por buscar, decodificar e executar instruções."
-},
-{
-numero: 10,
-palavra: "RAM",
-direcao: "H",
-linha: 9,
-coluna: 6,
-pista: "Memória principal volátil de leitura e escrita que perde dados sem energia."
-},
-{
-numero: 11,
-palavra: "DMA",
-direcao: "V",
-linha: 9,
-coluna: 8,
-pista: "Recurso que permite periféricos acessarem a memória sem passar pelo processador."
-},
-{
-numero: 12,
-palavra: "DUALCORE",
-direcao: "H",
-linha: 11,
-coluna: 8,
-pista: "Processador que possui dois núcleos físicos independentes no mesmo chip."
-},
-{
-numero: 13,
-palavra: "QUADCORE",
-direcao: "H",
-linha: 13,
-coluna: 1,
-pista: "Processador equipado com quatro núcleos físicos para processamento paralelo."
-}
+// Cada palavra: resposta, linha e coluna onde começa, direção (H ou V) e pista.
+const palavras = [
+  { resposta: "MICROCONTROLADOR", linha: 4, coluna: 0,  dir: "H", pista: "Chip único com CPU, memória e entradas e saídas, usado em eletrodomésticos e sistemas embarcados." },
+  { resposta: "REGISTRADORES",    linha: 0, coluna: 2,  dir: "H", pista: "Pequenas memórias dentro da CPU, as mais rápidas, que guardam dados em uso imediato." },
+  { resposta: "QUADCORE",         linha: 0, coluna: 20, dir: "H", pista: "Processador com quatro núcleos, capaz de executar quatro tarefas ao mesmo tempo." },
+  { resposta: "MEMORIADEMASSA",   linha: 2, coluna: 6,  dir: "H", pista: "Guarda arquivos e programas de forma permanente, como HD ou SSD, com muita capacidade." },
+  { resposta: "ADDRESSBUS",       linha: 5, coluna: 15, dir: "H", pista: "Via de mão única em que a CPU indica qual posição da memória quer acessar." },
+  { resposta: "DUALCORE",         linha: 6, coluna: 1,  dir: "H", pista: "Processador com dois núcleos, capaz de executar duas tarefas ao mesmo tempo." },
+  { resposta: "EEPROM",           linha: 6, coluna: 10, dir: "H", pista: "Memória não volátil regravável byte a byte, comum em microcontroladores para guardar configurações." },
+
+  { resposta: "ROM",     linha: 0, coluna: 8,  dir: "V", pista: "Memória não volátil que guarda as instruções de inicialização do computador, mesmo sem energia." },
+  { resposta: "ULA",     linha: 0, coluna: 16, dir: "V", pista: "Dentro da CPU, executa os cálculos e as comparações lógicas." },
+  { resposta: "DATABUS", linha: 0, coluna: 23, dir: "V", pista: "Via de mão dupla que transporta as informações entre CPU, memória e dispositivos." },
+  { resposta: "CACHE",   linha: 1, coluna: 19, dir: "V", pista: "Memória pequena e rápida entre CPU e RAM; guarda o que é mais usado." },
+  { resposta: "FLASH",   linha: 2, coluna: 21, dir: "V", pista: "Memória não volátil regravável por blocos, usada em pen drives e cartões de memória." },
+  { resposta: "DMA",     linha: 3, coluna: 0,  dir: "V", pista: "Controlador que move dados entre periféricos e RAM sem ocupar a CPU." },
+  { resposta: "UC",      linha: 3, coluna: 5,  dir: "V", pista: "Dá as ordens para as outras peças do processador: busca e interpreta as instruções." },
+  { resposta: "CPU",     linha: 4, coluna: 2,  dir: "V", pista: "Cérebro do computador; abriga a UC e a ULA e executa instruções." },
+  { resposta: "RAM",     linha: 4, coluna: 15, dir: "V", pista: "Memória temporária que guarda programas e dados em uso e perde tudo ao desligar." }
 ];
 
-let totalLinhas = 15;
-let totalColunas = 16;
+const tabuleiroEl = document.getElementById("tabuleiro");
+const contadorEl = document.getElementById("contador");
+const pistasH = document.getElementById("pistas-h");
+const pistasV = document.getElementById("pistas-v");
+
+let celulas = {};   // "linha,coluna" -> { input, el, letra }
+
+// Retorna as posições (linha, coluna) de cada letra de uma palavra.
+function posicoes(p) {
+  const lista = [];
+  for (let i = 0; i < p.resposta.length; i++) {
+    lista.push({
+      linha: p.linha + (p.dir === "V" ? i : 0),
+      coluna: p.coluna + (p.dir === "H" ? i : 0),
+      letra: p.resposta[i]
+    });
+  }
+  return lista;
+}
+
+// Numera as palavras: ordem de leitura (linha, depois coluna). Início igual = mesmo número.
+function numerar() {
+  const inicios = [];
+  palavras.forEach(p => {
+    const chave = p.linha + "," + p.coluna;
+    if (!inicios.includes(chave)) inicios.push(chave);
+  });
+  inicios.sort((a, b) => {
+    const [la, ca] = a.split(",").map(Number);
+    const [lb, cb] = b.split(",").map(Number);
+    return la - lb || ca - cb;
+  });
+  palavras.forEach(p => {
+    p.numero = inicios.indexOf(p.linha + "," + p.coluna) + 1;
+  });
+}
+
+function construirTabuleiro() {
+  const totalLinhas = Math.max(...palavras.map(p => p.linha + (p.dir === "V" ? p.resposta.length : 1)));
+  const totalColunas = Math.max(...palavras.map(p => p.coluna + (p.dir === "H" ? p.resposta.length : 1)));
+
+  tabuleiroEl.style.gridTemplateColumns = `repeat(${totalColunas}, auto)`;
+  tabuleiroEl.innerHTML = "";
+  celulas = {};
+
+  // descobre quais casas são usadas
+  palavras.forEach(p => {
+    posicoes(p).forEach(pos => {
+      const chave = pos.linha + "," + pos.coluna;
+      celulas[chave] = celulas[chave] || { linha: pos.linha, coluna: pos.coluna, letra: pos.letra };
+    });
+  });
+
+  for (let l = 0; l < totalLinhas; l++) {
+    for (let c = 0; c < totalColunas; c++) {
+      const chave = l + "," + c;
+      const el = document.createElement("div");
+      el.className = "celula";
+      el.setAttribute("role", "gridcell");
+
+      if (!celulas[chave]) {
+        el.classList.add("vazia");
+      } else {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.maxLength = 1;
+        input.autocomplete = "off";
+        input.setAttribute("aria-label", `Linha ${l + 1}, coluna ${c + 1}`);
+        input.dataset.linha = l;
+        input.dataset.coluna = c;
+        input.addEventListener("input", aoDigitar);
+        input.addEventListener("keydown", aoTeclar);
+        el.appendChild(input);
+
+        const inicio = palavras.find(p => p.linha === l && p.coluna === c);
+        if (inicio) {
+          const num = document.createElement("span");
+          num.className = "num";
+          num.textContent = inicio.numero;
+          el.appendChild(num);
+        }
+
+        celulas[chave].input = input;
+        celulas[chave].el = el;
+      }
+      tabuleiroEl.appendChild(el);
+    }
+  }
+}
+
+function construirPistas() {
+  pistasH.innerHTML = "";
+  pistasV.innerHTML = "";
+  const ordenadas = [...palavras].sort((a, b) => a.numero - b.numero);
+  ordenadas.forEach(p => {
+    const li = document.createElement("li");
+    li.dataset.resposta = p.resposta;
+    li.innerHTML = `<span class="n">${p.numero}</span>${p.pista}`;
+    p.li = li;
+    (p.dir === "H" ? pistasH : pistasV).appendChild(li);
+  });
+}
+
+// Direção usada para avançar o cursor: a da última palavra tocada.
 let direcaoAtual = "H";
 
-function montarJogo() {
-let grade = [];
-for (let l = 0; l < totalLinhas; l++) {
-grade[l] = [];
-for (let c = 0; c < totalColunas; c++) {
-grade[l][c] = null;
-}
+function aoDigitar(e) {
+  const input = e.target;
+  input.value = input.value.replace(/[^a-zA-ZÀ-ÿ]/g, "").toUpperCase();
+  limparEstado();
+  if (input.value) irParaProxima(input, 1);
 }
 
-for (let i = 0; i < palavras.length; i++) {
-let item = palavras[i];
-for (let j = 0; j < item.palavra.length; j++) {
-let l = item.linha;
-let c = item.coluna;
-if (item.direcao == "H") {
-c = c + j;
-} else {
-l = l + j;
+function aoTeclar(e) {
+  const input = e.target;
+  const l = Number(input.dataset.linha);
+  const c = Number(input.dataset.coluna);
+  const setas = { ArrowLeft: [0, -1, "H"], ArrowRight: [0, 1, "H"], ArrowUp: [-1, 0, "V"], ArrowDown: [1, 0, "V"] };
+
+  if (setas[e.key]) {
+    e.preventDefault();
+    direcaoAtual = setas[e.key][2];
+    focar(l + setas[e.key][0], c + setas[e.key][1]);
+  } else if (e.key === "Backspace" && !input.value) {
+    e.preventDefault();
+    irParaProxima(input, -1);
+  }
 }
 
-if (grade[l][c] == null) {
-grade[l][c] = {
-letra: item.palavra[j],
-numero: j == 0 ? item.numero : "",
-direcaoInicio: j == 0 ? item.direcao : ""
-};
-} else if (j == 0) {
-grade[l][c].numero = item.numero;
-grade[l][c].direcaoInicio = item.direcao;
-}
-}
+function focar(l, c) {
+  const cel = celulas[l + "," + c];
+  if (cel) { cel.input.focus(); cel.input.select(); }
 }
 
-let htmlTabuleiro = "";
-for (let l = 0; l < totalLinhas; l++) {
-for (let c = 0; c < totalColunas; c++) {
-if (grade[l][c] == null) {
-htmlTabuleiro += `<div class="celula-vazia"></div>`;
-} else {
-let numTexto = grade[l][c].numero != "" ? `<span class="numero-pista">${grade[l][c].numero}</span>` : "";
-let dirInicio = grade[l][c].direcaoInicio;
-htmlTabuleiro += `
-<div class="celula-wrapper">
-${numTexto}
-<input type="text" maxlength="1" id="cel_${l}_${c}" class="celula-input" onfocus="definirDirecao('${dirInicio}')" oninput="aoDigitar(this, ${l}, ${c})" onkeydown="aoPressionarTecla(event, ${l}, ${c})">
-</div>
-`;
-}
-}
-}
-div_tabuleiro.innerHTML = htmlTabuleiro;
-
-let htmlHorizontais = "";
-let htmlVerticais = "";
-for (let i = 0; i < palavras.length; i++) {
-let item = palavras[i];
-let linhaPista = `<li id="pista_${item.numero}" onclick="focarPalavra(${item.linha}, ${item.coluna}, '${item.direcao}')"><span class="clue-num">${item.numero}</span>${item.pista}</li>`;
-if (item.direcao == "H") {
-htmlHorizontais += linhaPista;
-} else {
-htmlVerticais += linhaPista;
-}
-}
-lista_horizontais.innerHTML = htmlHorizontais;
-lista_verticais.innerHTML = htmlVerticais;
+function irParaProxima(input, passo) {
+  const l = Number(input.dataset.linha);
+  const c = Number(input.dataset.coluna);
+  // escolhe a direção que existe nesta casa
+  const temH = celulas[l + "," + (c + passo)];
+  const temV = celulas[(l + passo) + "," + c];
+  if (direcaoAtual === "H" && temH) focar(l, c + passo);
+  else if (direcaoAtual === "V" && temV) focar(l + passo, c);
+  else if (temH) { direcaoAtual = "H"; focar(l, c + passo); }
+  else if (temV) { direcaoAtual = "V"; focar(l + passo, c); }
 }
 
-function definirDirecao(dir) {
-if (dir == "H" || dir == "V") {
-direcaoAtual = dir;
-}
-}
-
-function focarPalavra(l, c, dir) {
-direcaoAtual = dir;
-let campo = document.querySelector(`#cel_${l}_${c}`);
-if (campo != null) {
-campo.focus();
-}
-}
-
-function aoDigitar(input, l, c) {
-input.classList.remove("certa");
-input.classList.remove("errada");
-
-if (input.value.length == 1) {
-let proxL = direcaoAtual == "V" ? l + 1 : l;
-let proxC = direcaoAtual == "H" ? c + 1 : c;
-let proximoCampo = document.querySelector(`#cel_${proxL}_${proxC}`);
-if (proximoCampo != null) {
-proximoCampo.focus();
-}
-}
-}
-
-function aoPressionarTecla(evento, l, c) {
-let alvoL = l;
-let alvoC = c;
-
-if (evento.key == "ArrowRight") {
-direcaoAtual = "H";
-alvoC = c + 1;
-} else if (evento.key == "ArrowLeft") {
-direcaoAtual = "H";
-alvoC = c - 1;
-} else if (evento.key == "ArrowDown") {
-direcaoAtual = "V";
-alvoL = l + 1;
-} else if (evento.key == "ArrowUp") {
-direcaoAtual = "V";
-alvoL = l - 1;
-} else if (evento.key == "Backspace" && evento.target.value == "") {
-if (direcaoAtual == "H") {
-alvoC = c - 1;
-} else {
-alvoL = l - 1;
-}
-} else {
-return;
-}
-
-let proximo = document.querySelector(`#cel_${alvoL}_${alvoC}`);
-if (proximo != null) {
-evento.preventDefault();
-proximo.focus();
-}
+function limparEstado() {
+  Object.values(celulas).forEach(cel => cel.el.classList.remove("certa", "errada"));
 }
 
 function conferir() {
-let acertos = 0;
-let inputs = document.querySelectorAll(".celula-input");
-for (let i = 0; i < inputs.length; i++) {
-inputs[i].classList.remove("certa");
-inputs[i].classList.remove("errada");
-}
+  limparEstado();
+  let acertos = 0;
 
-for (let i = 0; i < palavras.length; i++) {
-let item = palavras[i];
-let palavraCorreta = true;
+  palavras.forEach(p => {
+    const pos = posicoes(p);
+    const certa = pos.every(x => celulas[x.linha + "," + x.coluna].input.value.toUpperCase() === x.letra);
+    if (certa) acertos++;
+    p.li.classList.toggle("feita", certa);
+    // palavras erradas ficam vermelhas; as certas pintam por cima depois
+    if (!certa) pos.forEach(x => celulas[x.linha + "," + x.coluna].el.classList.add("errada"));
+  });
 
-for (let j = 0; j < item.palavra.length; j++) {
-let l = item.linha;
-let c = item.coluna;
-if (item.direcao == "H") {
-c = c + j;
-} else {
-l = l + j;
-}
-let campo = document.querySelector(`#cel_${l}_${c}`);
-let valorDigitado = campo.value.toUpperCase();
-if (valorDigitado != item.palavra[j]) {
-palavraCorreta = false;
-}
-}
+  // segunda passada: palavras certas ficam verdes (mesmo em casas compartilhadas)
+  palavras.forEach(p => {
+    const pos = posicoes(p);
+    const certa = pos.every(x => celulas[x.linha + "," + x.coluna].input.value.toUpperCase() === x.letra);
+    if (certa) pos.forEach(x => {
+      const el = celulas[x.linha + "," + x.coluna].el;
+      el.classList.remove("errada");
+      el.classList.add("certa");
+    });
+  });
 
-let itemPista = document.querySelector(`#pista_${item.numero}`);
-if (palavraCorreta) {
-itemPista.classList.add("pista-resolvida");
-} else {
-itemPista.classList.remove("pista-resolvida");
-}
-
-for (let j = 0; j < item.palavra.length; j++) {
-let l = item.linha;
-let c = item.coluna;
-if (item.direcao == "H") {
-c = c + j;
-} else {
-l = l + j;
-}
-let campo = document.querySelector(`#cel_${l}_${c}`);
-if (palavraCorreta) {
-campo.classList.add("certa");
-} else if (!campo.classList.contains("certa")) {
-campo.classList.add("errada");
-}
-}
-
-if (palavraCorreta) {
-acertos++;
-}
-}
-
-span_acertos.innerHTML = acertos;
-
-if (acertos == palavras.length) {
-span_status.innerHTML = "STATUS: ZONE CLEARED!";
-div_vitoria.classList.remove("hidden");
-} else {
-span_status.innerHTML = `STATUS: ${acertos} DE ${palavras.length} ANÉIS COLETADOS`;
-}
-}
-
-function fecharVitoria() {
-div_vitoria.classList.add("hidden");
+  contadorEl.textContent = `${acertos} de ${palavras.length} palavras corretas`;
+  if (acertos === palavras.length) contadorEl.textContent += " – Parabéns, você completou!";
 }
 
 function reiniciar() {
-let inputs = document.querySelectorAll(".celula-input");
-for (let i = 0; i < inputs.length; i++) {
-inputs[i].value = "";
-inputs[i].classList.remove("certa");
-inputs[i].classList.remove("errada");
+  Object.values(celulas).forEach(cel => { cel.input.value = ""; });
+  limparEstado();
+  palavras.forEach(p => p.li.classList.remove("feita"));
+  contadorEl.textContent = `0 de ${palavras.length} palavras corretas`;
+  const primeira = Object.values(celulas)[0];
+  if (primeira) primeira.input.focus();
 }
 
-for (let i = 0; i < palavras.length; i++) {
-let itemPista = document.querySelector(`#pista_${palavras[i].numero}`);
-itemPista.classList.remove("pista-resolvida");
-}
+document.getElementById("btn-conferir").addEventListener("click", conferir);
+document.getElementById("btn-reiniciar").addEventListener("click", reiniciar);
 
-span_acertos.innerHTML = "0";
-span_status.innerHTML = "STATUS: PRONTO PARA O SPIN DASH!";
-div_vitoria.classList.add("hidden");
-}
-
-montarJogo();
+numerar();
+construirTabuleiro();
+construirPistas();
