@@ -1,0 +1,42 @@
+HTML
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sonic ArqComp - Cruzadinha</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">
+<h1>SONIC ZONE: ARQUITETURA COMPUTACIONAL</h1>
+<p>Complete a cruzadinha antes que o Dr. Eggman domine o hardware!</p>
+<div class="placar">
+<span>Anéis Coletados (Acertos): <strong id="span_acertos">0</strong> de 13 palavras</span>
+</div>
+</div>
+
+<div class="container">
+<div class="tabuleiro-area">
+<div id="div_tabuleiro" class="tabuleiro"></div>
+<div class="botoes">
+<button onclick="conferir()" class="btn-conferir">Conferir</button>
+<button onclick="reiniciar()" class="btn-reiniciar">Reiniciar</button>
+</div>
+</div>
+
+<div class="pistas-area">
+<div class="bloco-pistas">
+<h2>HORIZONTAIS</h2>
+<ul id="lista_horizontais"></ul>
+</div>
+<div class="bloco-pistas">
+<h2>VERTICAIS</h2>
+<ul id="lista_verticais"></ul>
+</div>
+</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
