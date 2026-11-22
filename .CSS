@@ -3,197 +3,454 @@ CSS
 box-sizing: border-box;
 margin: 0;
 padding: 0;
-font-family: 'Courier New', Courier, monospace;
 }
 
 body {
-background: linear-gradient(180deg, #0055d4 0%, #1e90ff 65%, #32cd32 65%, #228b22 100%);
+background: linear-gradient(180deg, #0038a8 0%, #0066ff 55%, #3399ff 85%, #3399ff 100%);
 min-height: 100vh;
+font-family: 'Roboto', sans-serif;
 color: #ffffff;
-padding: 20px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+overflow-x: hidden;
+position: relative;
 }
 
-.header {
-text-align: center;
-background-color: #002b80;
-border: 4px solid #ffd700;
-border-radius: 10px;
-padding: 15px;
-max-width: 1100px;
-margin: 0 auto 20px auto;
-box-shadow: 0 6px 0 #001540;
+.sky-layer {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 300px;
+pointer-events: none;
+z-index: 0;
 }
 
-.header h1 {
-color: #ffd700;
-font-size: 24px;
-text-shadow: 2px 2px #000000;
-margin-bottom: 6px;
+.cloud {
+position: absolute;
+background: rgba(255, 255, 255, 0.25);
+border-radius: 50px;
+height: 36px;
 }
 
-.header p {
-font-size: 14px;
-margin-bottom: 10px;
+.cloud-1 {
+width: 160px;
+top: 40px;
+left: 8%;
 }
 
-.placar {
-background-color: #d40000;
-border: 2px solid #ffffff;
-display: inline-block;
-padding: 6px 16px;
-border-radius: 20px;
-font-size: 16px;
+.cloud-2 {
+width: 220px;
+top: 95px;
+right: 10%;
 }
 
-.container {
+.hud-banner {
+position: relative;
+z-index: 2;
+max-width: 1180px;
+width: 95%;
+margin: 20px auto 15px auto;
+background: linear-gradient(135deg, #001f66 0%, #003399 100%);
+border: 4px solid #ffcc00;
+border-radius: 14px;
+padding: 16px 24px;
+box-shadow: 0 8px 0 #001133, 0 12px 24px rgba(0, 0, 0, 0.4);
 display: flex;
 flex-wrap: wrap;
-justify-content: center;
-gap: 20px;
-max-width: 1100px;
-margin: 0 auto;
+justify-content: space-between;
+align-items: center;
+gap: 15px;
 }
 
-.tabuleiro-area {
-background-color: #8b4513;
-border: 4px solid #ffd700;
-border-radius: 10px;
-padding: 15px;
-box-shadow: 0 6px 0 #4a2305;
+.emblem {
+display: flex;
+align-items: center;
+gap: 16px;
+}
+
+.title-box {
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+.zone-tag {
+font-family: 'Press Start 2P', monospace;
+font-size: 9px;
+color: #00ffcc;
+letter-spacing: 1px;
+}
+
+.hud-banner h1 {
+font-family: 'Press Start 2P', monospace;
+font-size: 22px;
+color: #ffcc00;
+text-shadow: 3px 3px 0 #cc0000, 5px 5px 0 #000000;
+}
+
+.ring-icon {
+width: 34px;
+height: 34px;
+border: 6px solid #ffcc00;
+border-radius: 50%;
+box-shadow: inset 0 0 0 2px #b37700, 0 0 10px #ffcc00;
+animation: spinRing 2.5s linear infinite;
+flex-shrink: 0;
+}
+
+.big-ring {
+width: 56px;
+height: 56px;
+border-width: 9px;
+margin: 0 auto 15px auto;
+}
+
+@keyframes spinRing {
+0% { transform: rotateY(0deg); }
+100% { transform: rotateY(360deg); }
+}
+
+.hud-stats {
+display: flex;
+flex-wrap: wrap;
+gap: 12px;
+align-items: center;
+}
+
+.stat-pill {
+background-color: #001133;
+border: 2px solid #ffcc00;
+padding: 10px 16px;
+border-radius: 30px;
+font-family: 'Press Start 2P', monospace;
+font-size: 11px;
+display: flex;
+align-items: center;
+gap: 10px;
+color: #ffffff;
+}
+
+.stat-pill strong {
+color: #ffcc00;
+font-size: 14px;
+}
+
+.ring-mini {
+width: 16px;
+height: 16px;
+border: 3px solid #ffcc00;
+border-radius: 50%;
+display: inline-block;
+}
+
+.status-pill {
+border-color: #00ffcc;
+color: #00ffcc;
+font-size: 9px;
+}
+
+.game-stage {
+position: relative;
+z-index: 2;
+max-width: 1180px;
+width: 95%;
+margin: 0 auto 30px auto;
+display: flex;
+flex-wrap: wrap;
+gap: 24px;
+align-items: flex-start;
+justify-content: center;
+}
+
+.board-cabinet {
+background-color: #111827;
+border: 4px solid #ffcc00;
+border-radius: 14px;
+padding: 18px;
+box-shadow: 0 8px 0 #000000, 0 14px 28px rgba(0, 0, 0, 0.45);
 display: flex;
 flex-direction: column;
 align-items: center;
 }
 
+.cabinet-header {
+width: 100%;
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 12px;
+padding-bottom: 8px;
+border-bottom: 2px solid #374151;
+font-family: 'Press Start 2P', monospace;
+font-size: 10px;
+color: #ffcc00;
+}
+
+.tip-text {
+font-family: 'Roboto', sans-serif;
+font-size: 12px;
+color: #9ca3af;
+}
+
 .tabuleiro {
 display: grid;
-grid-template-columns: repeat(16, 30px);
-grid-template-rows: repeat(15, 30px);
-gap: 2px;
-background-color: #5c2d0c;
-padding: 5px;
-border: 2px solid #ffd700;
+grid-template-columns: repeat(16, 33px);
+grid-template-rows: repeat(15, 33px);
+gap: 3px;
+background-color: #1f2937;
+padding: 8px;
+border-radius: 8px;
+border: 3px solid #0055ff;
 }
 
 .celula-vazia {
-width: 30px;
-height: 30px;
-background-color: transparent;
+width: 33px;
+height: 33px;
+background-color: rgba(17, 24, 39, 0.45);
+border-radius: 4px;
 }
 
 .celula-wrapper {
 position: relative;
-width: 30px;
-height: 30px;
+width: 33px;
+height: 33px;
 }
 
 .numero-pista {
 position: absolute;
-top: 1px;
-left: 2px;
+top: 2px;
+left: 3px;
 font-size: 9px;
-font-weight: bold;
-color: #002b80;
+font-weight: 700;
+color: #003399;
 pointer-events: none;
+z-index: 2;
 }
 
 .celula-input {
 width: 100%;
 height: 100%;
 text-align: center;
-font-size: 16px;
-font-weight: bold;
+font-family: 'Press Start 2P', monospace;
+font-size: 13px;
 text-transform: uppercase;
-border: 2px solid #0055d4;
+border: 2px solid #0055ff;
+border-radius: 5px;
 background-color: #ffffff;
-color: #000000;
+color: #111827;
 outline: none;
+transition: transform 0.1s, background-color 0.2s, border-color 0.2s;
 }
 
 .celula-input:focus {
-background-color: #fff8dc;
-border-color: #ffd700;
+background-color: #fef08a;
+border-color: #ff6600;
+transform: scale(1.08);
+z-index: 3;
+position: relative;
+box-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
 }
 
 .certa {
-background-color: #7cfc00 !important;
-border-color: #006400 !important;
-color: #003300 !important;
+background-color: #22c55e !important;
+border-color: #14532d !important;
+color: #ffffff !important;
+text-shadow: 1px 1px 0 #14532d;
 }
 
 .errada {
-background-color: #ff6347 !important;
-border-color: #8b0000 !important;
+background-color: #ef4444 !important;
+border-color: #7f1d1d !important;
 color: #ffffff !important;
+text-shadow: 1px 1px 0 #7f1d1d;
 }
 
-.botoes {
-margin-top: 15px;
+.controls-bar {
+margin-top: 18px;
 display: flex;
-gap: 15px;
+gap: 16px;
+width: 100%;
+justify-content: center;
 }
 
-button {
-padding: 10px 24px;
-font-size: 16px;
-font-weight: bold;
-border: 3px solid #ffffff;
+.btn-sonic {
+font-family: 'Press Start 2P', monospace;
+font-size: 11px;
+padding: 14px 20px;
 border-radius: 8px;
+border: 3px solid #ffffff;
 cursor: pointer;
-text-transform: uppercase;
+transition: transform 0.1s;
 }
 
-.btn-conferir {
-background-color: #ffd700;
-color: #002b80;
-box-shadow: 0 4px 0 #b8860b;
+.btn-sonic:active {
+transform: translateY(4px);
 }
 
-.btn-conferir:hover {
-background-color: #ffea00;
+.btn-gold {
+background-color: #ffcc00;
+color: #002266;
+box-shadow: 0 5px 0 #b38600;
 }
 
-.btn-reiniciar {
-background-color: #d40000;
+.btn-gold:hover {
+background-color: #ffe033;
+}
+
+.btn-red {
+background-color: #e60000;
 color: #ffffff;
-box-shadow: 0 4px 0 #800000;
+box-shadow: 0 5px 0 #800000;
 }
 
-.btn-reiniciar:hover {
+.btn-red:hover {
 background-color: #ff1a1a;
 }
 
-.pistas-area {
+.clues-panel {
 flex: 1;
-min-width: 300px;
-max-width: 480px;
+min-width: 320px;
+max-width: 520px;
 display: flex;
 flex-direction: column;
-gap: 15px;
+gap: 18px;
 }
 
-.bloco-pistas {
-background-color: #002b80;
-border: 4px solid #ffd700;
-border-radius: 10px;
-padding: 15px;
-box-shadow: 0 6px 0 #001540;
+.clue-card {
+background-color: #001f66;
+border: 4px solid #ffcc00;
+border-radius: 14px;
+padding: 16px 20px;
+box-shadow: 0 8px 0 #001133;
 }
 
-.bloco-pistas h2 {
-color: #ffd700;
-font-size: 18px;
-margin-bottom: 10px;
-border-bottom: 2px solid #ffd700;
-padding-bottom: 4px;
+.card-title {
+display: flex;
+align-items: center;
+gap: 10px;
+border-bottom: 3px solid #ffcc00;
+padding-bottom: 10px;
+margin-bottom: 12px;
 }
 
-.bloco-pistas ul {
-list-style: none;
+.arrow-badge {
+background-color: #e60000;
+color: #ffffff;
+padding: 4px 8px;
+border-radius: 6px;
+font-size: 12px;
+font-weight: bold;
 }
 
-.bloco-pistas li {
+.clue-card h2 {
+font-family: 'Press Start 2P', monospace;
 font-size: 13px;
-margin-bottom: 8px;
+color: #ffcc00;
+}
+
+.clue-card ul {
+list-style: none;
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+
+.clue-card li {
+background-color: rgba(0, 51, 153, 0.7);
+border-left: 4px solid #00ffcc;
+padding: 8px 12px;
+border-radius: 6px;
+font-size: 14px;
 line-height: 1.4;
+transition: background-color 0.2s;
+}
+
+.clue-card li.pista-resolvida {
+border-left-color: #22c55e;
+background-color: rgba(34, 197, 94, 0.2);
+text-decoration: line-through;
+color: #bbf7d0;
+}
+
+.clue-num {
+display: inline-block;
+background-color: #ffcc00;
+color: #001f66;
+font-weight: 700;
+padding: 1px 6px;
+border-radius: 4px;
+margin-right: 6px;
+font-size: 12px;
+}
+
+.victory-modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.8);
+z-index: 10;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 20px;
+}
+
+.hidden {
+display: none;
+}
+
+.victory-box {
+background: linear-gradient(180deg, #002b80 0%, #001133 100%);
+border: 5px solid #ffcc00;
+border-radius: 16px;
+padding: 30px;
+max-width: 460px;
+width: 100%;
+text-align: center;
+box-shadow: 0 0 30px #ffcc00;
+}
+
+.victory-box h2 {
+font-family: 'Press Start 2P', monospace;
+font-size: 22px;
+color: #ffcc00;
+text-shadow: 3px 3px 0 #cc0000;
+margin-bottom: 14px;
+}
+
+.victory-box p {
+font-size: 15px;
+margin-bottom: 18px;
+line-height: 1.5;
+}
+
+.score-summary {
+font-family: 'Press Start 2P', monospace;
+font-size: 12px;
+color: #00ffcc;
+background-color: #000000;
+padding: 12px;
+border-radius: 8px;
+margin-bottom: 20px;
+border: 2px solid #00ffcc;
+}
+
+.ground-checker {
+width: 100%;
+height: 44px;
+border-top: 8px solid #22c55e;
+background-color: #8b4513;
+background-image:
+linear-gradient(45deg, #a0522d 25%, transparent 25%),
+linear-gradient(-45deg, #a0522d 25%, transparent 25%),
+linear-gradient(45deg, transparent 75%, #a0522d 75%),
+linear-gradient(-45deg, transparent 75%, #a0522d 75%);
+background-size: 32px 32px;
+background-position: 0 0, 0 16px, 16px -16px, -16px 0;
+position: relative;
+z-index: 2;
 }
